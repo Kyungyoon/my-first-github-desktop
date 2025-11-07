@@ -14,10 +14,27 @@ function Admin() {
   const ADMIN_PASSWORD = 'nuha2024'
 
   const loadUsers = () => {
-    const savedUsers = JSON.parse(localStorage.getItem('nuhaHouseUsers') || '[]')
-    console.log('Loaded users from localStorage:', savedUsers)
-    console.log('Total users:', savedUsers.length)
-    setUsers(savedUsers)
+    try {
+      const rawData = localStorage.getItem('nuhaHouseUsers')
+      console.log('🔍 Raw localStorage data:', rawData)
+      
+      const savedUsers = JSON.parse(rawData || '[]')
+      console.log('✅ Loaded users from localStorage:', savedUsers)
+      console.log('✅ Total users:', savedUsers.length)
+      console.log('✅ Users array:', JSON.stringify(savedUsers, null, 2))
+      
+      // Check for specific email
+      const targetEmail = 'kyoonii95@gmail.com'
+      const foundUser = savedUsers.find(u => u.email === targetEmail)
+      console.log(`🔍 Looking for ${targetEmail}:`, foundUser ? '✅ FOUND' : '❌ NOT FOUND')
+      
+      setUsers(savedUsers)
+      return savedUsers
+    } catch (error) {
+      console.error('❌ Error loading users:', error)
+      setUsers([])
+      return []
+    }
   }
 
   useEffect(() => {
@@ -29,6 +46,14 @@ function Admin() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  // Reload users when authentication status changes
+  useEffect(() => {
+    if (isAuthenticated) {
+      console.log('🔐 User authenticated, loading users...')
+      loadUsers()
+    }
+  }, [isAuthenticated])
 
   const handleLogin = (e) => {
     e.preventDefault()
@@ -121,6 +146,9 @@ function Admin() {
         {users.length === 0 ? (
           <div className="empty-state">
             <p>아직 가입한 사용자가 없습니다.</p>
+            <p style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
+              💡 브라우저 콘솔(F12)에서 localStorage 데이터를 확인해보세요.
+            </p>
           </div>
         ) : (
           <>
