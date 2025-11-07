@@ -32,6 +32,20 @@ The app will be available at `http://localhost:5173`
 npm run build
 ```
 
+### 배포 전 미리보기 (Production Preview)
+
+배포하기 전에 프로덕션 빌드를 로컬에서 미리 확인할 수 있습니다:
+
+```bash
+# 1. 프로덕션 빌드 생성
+npm run build
+
+# 2. 빌드된 결과물 미리보기
+npm run preview
+```
+
+이렇게 하면 `http://localhost:4173` (또는 다른 포트)에서 배포될 사이트와 동일한 버전을 확인할 수 있습니다.
+
 ## 배포하기 (Deployment)
 
 프로젝트를 배포하는 방법은 [DEPLOYMENT.md](./DEPLOYMENT.md) 파일을 참고하세요.

@@ -87,8 +87,22 @@ function SignUp() {
     timeoutRef.current = setTimeout(() => {
       // Only update state if component is still mounted
       if (isMountedRef.current) {
-        console.log('Form submitted:', formData)
-        alert('Sign up successful! (This is a demo)')
+        // Save to localStorage
+        const userData = {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          // Don't save password for security
+          createdAt: new Date().toISOString(),
+        }
+        
+        // Get existing users or create new array
+        const existingUsers = JSON.parse(localStorage.getItem('nuhaHouseUsers') || '[]')
+        existingUsers.push(userData)
+        localStorage.setItem('nuhaHouseUsers', JSON.stringify(existingUsers))
+        
+        console.log('Form submitted and saved:', userData)
+        alert(`Sign up successful! Welcome ${formData.firstName}!`)
         setIsSubmitting(false)
         // Reset form
         setFormData({
