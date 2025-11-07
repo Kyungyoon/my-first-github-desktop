@@ -15,6 +15,8 @@ function Admin() {
 
   const loadUsers = () => {
     const savedUsers = JSON.parse(localStorage.getItem('nuhaHouseUsers') || '[]')
+    console.log('Loaded users from localStorage:', savedUsers)
+    console.log('Total users:', savedUsers.length)
     setUsers(savedUsers)
   }
 
@@ -159,6 +161,13 @@ function Admin() {
         )}
 
         <div className="users-actions">
+          <Button 
+            variant="outline" 
+            onClick={loadUsers}
+            className="mr-2"
+          >
+            새로고침
+          </Button>
           <Button variant="ghost" onClick={() => navigate('/')}>
             홈으로
           </Button>
