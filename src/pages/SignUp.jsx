@@ -87,31 +87,60 @@ function SignUp() {
     timeoutRef.current = setTimeout(() => {
       // Only update state if component is still mounted
       if (isMountedRef.current) {
-        // Save to localStorage
-        const userData = {
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          email: formData.email,
-          // Don't save password for security
-          createdAt: new Date().toISOString(),
+        try {
+          // Save to localStorage
+          const userData = {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            // Don't save password for security
+            createdAt: new Date().toISOString(),
+          }
+          
+          // Get existing users or create new array
+          const existingUsers = JSON.parse(localStorage.getItem('nuhaHouseUsers') || '[]')
+          
+          // Check if email already exists
+          const emailExists = existingUsers.some(user => user.email === userData.email)
+          if (emailExists) {
+            alert('This email is already registered!')
+            setIsSubmitting(false)
+            return
+          }
+          
+          existingUsers.push(userData)
+          localStorage.setItem('nuhaHouseUsers', JSON.stringify(existingUsers))
+          
+          // Verify the save was successful
+          const savedUsers = JSON.parse(localStorage.getItem('nuhaHouseUsers') || '[]')
+          console.log('✅ User saved successfully:', userData)
+          console.log('✅ Total users in localStorage:', savedUsers.length)
+          console.log('✅ All users:', savedUsers)
+          
+          // Double check the email is in the list
+          const foundUser = savedUsers.find(u => u.email === userData.email)
+          if (foundUser) {
+            console.log('✅ Verification: User found in localStorage:', foundUser)
+            alert(`Sign up successful! Welcome ${formData.firstName}!`)
+          } else {
+            console.error('❌ ERROR: User was not found after saving!')
+            alert('There was an error saving your information. Please try again.')
+          }
+          
+          setIsSubmitting(false)
+          // Reset form
+          setFormData({
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
+          })
+        } catch (error) {
+          console.error('❌ Error saving user data:', error)
+          alert('There was an error saving your information. Please try again.')
+          setIsSubmitting(false)
         }
-        
-        // Get existing users or create new array
-        const existingUsers = JSON.parse(localStorage.getItem('nuhaHouseUsers') || '[]')
-        existingUsers.push(userData)
-        localStorage.setItem('nuhaHouseUsers', JSON.stringify(existingUsers))
-        
-        console.log('Form submitted and saved:', userData)
-        alert(`Sign up successful! Welcome ${formData.firstName}!`)
-        setIsSubmitting(false)
-        // Reset form
-        setFormData({
-          firstName: '',
-          lastName: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-        })
       }
     }, 1000)
   }
