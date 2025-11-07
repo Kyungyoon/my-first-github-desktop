@@ -16,18 +16,8 @@ function Admin() {
   const loadUsers = () => {
     try {
       const rawData = localStorage.getItem('nuhaHouseUsers')
-      console.log('🔍 Raw localStorage data:', rawData)
-      
       const savedUsers = JSON.parse(rawData || '[]')
-      console.log('✅ Loaded users from localStorage:', savedUsers)
-      console.log('✅ Total users:', savedUsers.length)
-      console.log('✅ Users array:', JSON.stringify(savedUsers, null, 2))
-      
-      // Check for specific email
-      const targetEmail = 'kyoonii95@gmail.com'
-      const foundUser = savedUsers.find(u => u.email === targetEmail)
-      console.log(`🔍 Looking for ${targetEmail}:`, foundUser ? '✅ FOUND' : '❌ NOT FOUND')
-      
+      console.log('✅ Loaded users from localStorage:', savedUsers.length, 'users')
       setUsers(savedUsers)
       return savedUsers
     } catch (error) {
@@ -50,7 +40,6 @@ function Admin() {
   // Reload users when authentication status changes
   useEffect(() => {
     if (isAuthenticated) {
-      console.log('🔐 User authenticated, loading users...')
       loadUsers()
     }
   }, [isAuthenticated])
@@ -76,9 +65,11 @@ function Admin() {
   }
 
   const handleClearAll = () => {
-    if (window.confirm('모든 사용자 정보를 삭제하시겠습니까?')) {
+    if (window.confirm('모든 사용자 정보를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.')) {
       localStorage.removeItem('nuhaHouseUsers')
       setUsers([])
+      console.log('✅ All user data cleared from localStorage')
+      alert('모든 사용자 정보가 삭제되었습니다.')
     }
   }
 
@@ -191,18 +182,7 @@ function Admin() {
         <div className="users-actions">
           <Button 
             variant="outline" 
-            onClick={() => {
-              console.log('=== localStorage 직접 확인 ===');
-              const raw = localStorage.getItem('nuhaHouseUsers');
-              console.log('Raw data:', raw);
-              const users = JSON.parse(raw || '[]');
-              console.log('Parsed users:', users);
-              console.log('Total:', users.length);
-              const found = users.find(u => u.email === 'kyoonii95@gmail.com');
-              console.log('kyoonii95@gmail.com:', found);
-              alert(`총 ${users.length}명의 사용자가 저장되어 있습니다.\n콘솔(F12)에서 자세한 정보를 확인하세요.`);
-              loadUsers();
-            }}
+            onClick={loadUsers}
             className="mr-2"
           >
             새로고침
