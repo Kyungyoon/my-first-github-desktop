@@ -191,7 +191,18 @@ function Admin() {
         <div className="users-actions">
           <Button 
             variant="outline" 
-            onClick={loadUsers}
+            onClick={() => {
+              console.log('=== localStorage 직접 확인 ===');
+              const raw = localStorage.getItem('nuhaHouseUsers');
+              console.log('Raw data:', raw);
+              const users = JSON.parse(raw || '[]');
+              console.log('Parsed users:', users);
+              console.log('Total:', users.length);
+              const found = users.find(u => u.email === 'kyoonii95@gmail.com');
+              console.log('kyoonii95@gmail.com:', found);
+              alert(`총 ${users.length}명의 사용자가 저장되어 있습니다.\n콘솔(F12)에서 자세한 정보를 확인하세요.`);
+              loadUsers();
+            }}
             className="mr-2"
           >
             새로고침
