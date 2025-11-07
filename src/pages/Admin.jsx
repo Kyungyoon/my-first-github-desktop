@@ -13,6 +13,11 @@ function Admin() {
   // Admin password (간단한 예시 - 실제로는 더 안전한 방법 사용)
   const ADMIN_PASSWORD = 'nuha2024'
 
+  const loadUsers = () => {
+    const savedUsers = JSON.parse(localStorage.getItem('nuhaHouseUsers') || '[]')
+    setUsers(savedUsers)
+  }
+
   useEffect(() => {
     // Check if already authenticated
     const authStatus = sessionStorage.getItem('adminAuthenticated')
@@ -20,12 +25,8 @@ function Admin() {
       setIsAuthenticated(true)
       loadUsers()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const loadUsers = () => {
-    const savedUsers = JSON.parse(localStorage.getItem('nuhaHouseUsers') || '[]')
-    setUsers(savedUsers)
-  }
 
   const handleLogin = (e) => {
     e.preventDefault()
