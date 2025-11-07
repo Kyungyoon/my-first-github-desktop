@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// GitHub Pages를 위한 base 경로 설정
-// 저장소 이름이 'my-first-github-desktop'인 경우
-const base = process.env.NODE_ENV === 'production' ? '/my-first-github-desktop/' : '/'
+// Vercel은 루트 경로를 사용하므로 base를 '/'로 설정
+// GitHub Pages를 사용하려면 환경 변수 VITE_BASE_PATH를 설정하세요
+const base = process.env.VITE_BASE_PATH || '/'
 
 export default defineConfig({
   plugins: [react()],
